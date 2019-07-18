@@ -1,0 +1,47 @@
+<div class="container-fluid row" style="height: 100%;">
+        <div *ngIf="toggleCol" class="col-4">
+        <div class="row">
+            <div class="col-8">
+                <h2>Marker info</h2>
+                Coordinates = {{displayInfo.lat}}, {{displayInfo.lng}}<br>
+                Location name = {{displayInfo.name}}
+            </div>
+            <div class="col-4">
+                <button (click)='closeCol()' class="absRight">Close</button>
+            </div>
+        </div>
+    </div>
+    <div [class]="toggleCol?'col-8':'col-12'">
+        <div id="wrapper">
+            <agm-map 
+                [latitude]="lat"
+                [longitude]="lng"
+                [zoom]="zoom"
+                [zoomControl]="true"
+                [usePanning]="true">
+                <agm-marker
+                    *ngFor="let m of markers; let i = index"
+                    (markerClick)="clickedMarker($event, m.name, i, infoWindow)"
+                    [latitude]="m.lat"
+                    [longitude]="m.lng"
+                    [label]="{color: 'white',fontWeight: '',fontSize: '8px', text: m.name}">
+                    <agm-info-window 
+                        [latitude]="m.lat" 
+                        [longitude]="m.lng"
+                        #infoWindow>
+                        <div>{{m.name}}</div>
+                      </agm-info-window>
+                  
+                </agm-marker>
+    
+              </agm-map> 
+              <div id="over_map">
+                  <button (click)="goToSecond()">Go to second</button>
+              </div>
+        </div>
+    </div>
+</div>
+
+<div style="position: absolute;z-index: 999999;">
+        <button>Go to second</button>
+    </div>

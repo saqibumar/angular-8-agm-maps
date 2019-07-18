@@ -1,0 +1,80 @@
+<div class="">
+
+    <div class="row">
+        <div class="col-12">
+
+            <form [formGroup]="mapForm" (ngSubmit)="onSubmit()">
+                <div class="row">
+                    <div class="col-3">
+                            <input type="text" name="locationName" placeholder="Location name" formControlName="locationName" >
+                            <div *ngIf="f.locationName.errors" class="err">
+                                    <div *ngIf="f.locationName.errors.required">Location Name is required</div>
+                                </div>
+            
+                    </div>
+                    <div class="col-3">
+                            <input type="number" name="lat" placeholder="Latitude" formControlName="lat" >
+                            <div *ngIf="f.lat.errors" class="err">
+                                    <div *ngIf="f.lat.errors.required">Latitude is required</div>
+                                </div>
+            
+                    </div>
+                    <div class="col-3">
+                            <input type="number" name="lng" placeholder="Longitude" formControlName="lng" >
+                            <div *ngIf="f.lng.errors" class="err">
+                                    <div *ngIf="f.lng.errors.required">Longitude is required</div>
+                                </div>
+            
+                    </div>
+                    <div class="col-3">
+                            <input type="submit" value="Add to map">
+                    </div>
+                </div>
+            </form>
+            <button (click)="clearMarkers();" style="float:right;">Toggle remove markers</button>
+            <button (click)="circle();" style="float:right;">Toggle draw circles</button>
+            <button (click)="getLocations()" style="float:right;">Reset</button>
+        </div>
+    </div>
+    <div class="row" style="height: 100%;">
+            <div class="col-12">
+    
+    <agm-map 
+        [latitude]="lat"
+        [longitude]="lng"
+        [zoom]="zoom"
+        [zoomControl]="true"
+        [usePanning]="true"
+        (mapReady)="mapReady($event)"
+        (mapClick)="mapClicked($event)">
+    <agm-marker
+        *ngFor="let m of markers; let i=index"
+        [latitude]="m.lat"
+        [longitude]="m.lng"
+        [label]="{color: 'white',fontWeight: '',fontSize: '10px', text: m.name}">
+        <agm-info-window 
+            [latitude]="m.lat" 
+            [longitude]="m.lng"
+            #infoWindow>
+            <div>{{m.name}}
+                <br>
+                {{m.lat}}, {{m.lng}}
+            </div>
+          </agm-info-window>
+      
+    </agm-marker>
+    <agm-circle [latitude]="lat" [longitude]="lng" *ngIf="isCircle"
+        [radius]="radius"
+        [fillColor]="'yellow'"
+        [circleDraggable]="true"
+        (dragEnd)="circleDragEnd($event)"
+        (centerChange)="onCenterChanged($event)"
+        (radiusChange)="onRadiusChanged($event)"
+        [editable]="true">
+    </agm-circle>
+    
+    </agm-map> 
+    
+    </div>
+    </div>
+</div>
